@@ -1,16 +1,14 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-vector<vector<int>> adj;
+vector<vector<int>> adj(1000000);
 int n,q;
-int color[1000000]; 
-bool bipartite() 
-{
-    for (int i = 0; i < 1000000; ++i) 
-        color[i] = -1; 
-    color[0] = 1; 
+vector<int> color(1000000,-1);
+bool bipartite(int node) 
+{ 
+    color[node] = 1; 
     queue <int> q; 
-    q.push(0); 
+    q.push(node); 
     while (!q.empty()) 
     { 
         int u = q.front(); 
@@ -35,7 +33,6 @@ int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
     cin >> n >> q;
-    for (int i = 0; i < n; i++) adj.push_back({});
     while (q--){
         int u,v;
         cin >> u >> v;
@@ -43,12 +40,21 @@ int main(){
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    if (bipartite() == true){
-        for (int i = 0; i < n; i++){
-            if (color[i] == 1 || color[i] ==-1) cout << '1' << ' ';
-            else cout << '2' << ' ';
+    for (int i = 0; i < n; i++){
+        if (color[i] == -1){
+            if (bipartite(i) == true){
+                if (color[i] == 1) cout << 1 << ' ';
+                else cout << 2 << ' ';
+            }
+            else{
+                cout << "IMPOSSIBLE" << endl;
+                break;
+            }
+        }
+        else{
+            if (color[i] == 1) cout << 1 << ' ';
+                else cout << 2 << ' ';
         }
     }
-    else cout << "IMPOSSIBLE";
     return 0;
 }
